@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 import base64
 import random
+import zipfile
 
 # --- CONFIGURATION PAGE ---
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
@@ -100,9 +101,23 @@ if st.session_state.page == 1:
 # --- CHARGEMENT DES DONNÉES ---
 @st.cache_data
 def load_data():
+    # 1. Lecture des fichiers CSV classiques
     df_film = pd.read_csv("df_FINAL_movie.csv")
-    df_ml = pd.read_csv("df_ML.csv")
     df_inter = pd.read_csv("df_FINAL_intervenant.csv")
+    
+    # 2. Lecture du fichier df_ML contenu dans le ZIP
+    try:
+        # On ouvre l'archive zip nommée "df_ML.zip"
+        with zipfile.ZipFile("df_ML.zip", "r") as z:
+            # On indique le nom du fichier CSV à l'intérieur du zip
+            # (Vérifiez bien qu'il s'appelle df_ML.csv à l'intérieur)
+            with z.open("df_ML.csv") as f:
+                df_ml = pd.read_csv(f)
+    except Exception as e:
+        st.error(f"Erreur lors de la lecture du fichier ZIP : {e}")
+        # En cas d'erreur, on crée un DataFrame vide pour ne pas bloquer le reste du code
+        df_ml = pd.DataFrame()
+
     return df_film, df_ml, df_inter
 
 df_film, df_ml, df_inter = load_data()
@@ -377,3 +392,4 @@ if st.session_state.reco_list:
             else:
 
                 st.markdown('<p style="color:gray; text-align:center;">Aucun intervenant répertorié</p>', unsafe_allow_html=True)
+
