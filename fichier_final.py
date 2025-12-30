@@ -352,7 +352,7 @@ if st.session_state.reco_list:
                     
 
                     if not isinstance(img_url, str) or pd.isna(img_url) or img_url.lower() == "nan":
-                        img_url = r"C:\Users\carin\Desktop\Formation Data Analyst\99. Projets\P2 - Recommandations de films\Streamlit\images\Intervenant_manquant.png"
+                        img_url = "Intervenant_manquant.png"
                  
                     # Affchage en ligne (image à droite gauche, nom + Bio à droite)
                     c_img,c_txt = st.columns([1,2])
@@ -375,4 +375,5 @@ if st.session_state.reco_list:
                     
                     st.markdown('<div style="margin-bottom: 25px; border-bottom: 1px solid rgba(214, 185, 139, 0.2);"></div>', unsafe_allow_html=True)
             else:
+
                 st.markdown('<p style="color:gray; text-align:center;">Aucun intervenant répertorié</p>', unsafe_allow_html=True)
